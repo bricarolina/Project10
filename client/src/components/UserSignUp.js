@@ -8,8 +8,9 @@ export default class UserSignUp extends Component {
     lastName: '',
     emailAddress: '',
     password: '',
+    confirmPassword: '',
     errors: [],
-  };
+  }
 
   render() {
     const {
@@ -17,14 +18,15 @@ export default class UserSignUp extends Component {
       lastName,
       emailAddress,
       password,
-      errors,
+      confirmPassword,
+      errors
     } = this.state;
 
     return (
         <div className="bounds">
           <div className="grid-33 centered signin">
             <h1>Sign Up</h1>
-            {errors
+           {errors
                 ?
                 <ul className="validation--errors--label">
                   {
@@ -34,7 +36,7 @@ export default class UserSignUp extends Component {
                   }
                 </ul>
                 : ''
-            }
+            } 
             <Form
                 cancel={this.cancel}
                 submit={this.submit}
@@ -69,6 +71,13 @@ export default class UserSignUp extends Component {
                           value={password}
                           onChange={this.change}
                           placeholder="Password"/>
+                      <input 
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          type="password"
+                          value={confirmPassword}
+                          onChange={this.change}
+                          placeholder="Confirm Password" />
                     </React.Fragment>
                 )}/>
             <p>
@@ -98,36 +107,43 @@ export default class UserSignUp extends Component {
       lastName,
       emailAddress,
       password,
+      confirmPassword,
     } = this.state;
 
-    const user = {
+    let user = {
       firstName,
       lastName,
       emailAddress,
       password,
+      confirmPassword
     };
 
-    try {
-      context.data.createUser(user)
-          .then(errors => {
-            if (errors.length > 0) {
-              this.setState({errors})
-            } else {
-              context.actions.signIn(emailAddress, password)
-                  .then(this.props.history.push('/courses'))
-            }
+      if (password !== confirmPassword) {
+        const passwordsDoNotMatch = [ "Passwords do not match"];
+          this.setState({
+            errors: passwordsDoNotMatch
           })
-          .catch(err => {
-            console.log(err);
-            this.props.history.push('/error');
-          });
-    } catch (error) {
-      console.log(error);
-      this.props.history.push('/error')
-    }
-  };
-
+          return;
+      } else {
+            context.data.createUser(user)
+                .then(errors => {
+                  if (errors.length) {
+                    this.setState({ errors });
+                  } else {
+                    this.setState({ errors: []});
+                    context.actions.signIn(emailAddress, password)
+                        .then(() => {
+                          this.props.history.push('/');
+                  });
+                }
+              })
+                .catch((err) => {
+                  console.log(err);
+                  this.props.history.push('/error');
+                })
+        }
+  }
   cancel = () => {
     this.props.history.push('/');
-  };
+  }
 }

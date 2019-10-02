@@ -108,8 +108,12 @@ export default class CourseDetail extends Component {
     const {emailAddress} = authenticatedUser;
     const password = context.userPassword;
     try {
-      const response = await context.data.deleteCourse(id, emailAddress, password);
-      if (response.status === 204) {
+
+      // Delete and get the array of error messages
+      const errors = await context.data.deleteCourse(id, emailAddress, password);
+
+      // Success looks like an empty array
+      if (errors && errors.length === 0) {
         this.props.history.push('/courses');
       } else {
         this.props.history.push('/notfound');

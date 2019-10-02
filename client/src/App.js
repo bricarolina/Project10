@@ -50,7 +50,7 @@ export default () => (
         <HeaderWithContext/>
 
         <Switch>
-          <Route exact path="/" render={() => <Redirect to='/courses'/>}/>
+          <Route exact path="/" component={CoursesWithContext}/>
           <Route exact path="/courses" component={CoursesWithContext}/>
           <PrivateRoute exact path="/courses/create" component={CreateCourseWithContext}/>
           <PrivateRoute exact path="/courses/delete" component={DeleteCourseWithContext}/>
