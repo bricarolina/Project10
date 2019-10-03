@@ -119,7 +119,7 @@ export default class Data {
       materialsNeeded,
       userId,
       id
-    }, true, {credentials: {emailAddress, password}});
+    }, true, {emailAddress, password});
     if (response.status === 204) {
       console.log('Course updated');
       return response;
@@ -141,7 +141,7 @@ export default class Data {
       });
     }
       else {
-        throw ["Unknown error occurred"];
+        new Error('Unknown error occurred');
     }
   }
 }

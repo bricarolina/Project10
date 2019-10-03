@@ -55,6 +55,11 @@ module.exports = (sequelize) => {
       foreignKey: {
         fieldName: 'userId',
         allowNull: false,
+        validate: {
+          notnull: {
+            msg: 'Course can only be changed by course creator'
+          }
+        }
       },
     });
   };
